@@ -1,0 +1,50 @@
+{% extends 'dashboard/base.html' %}
+{% load static %}
+{% block content %}
+
+<section class='text-center container'>
+    <h2>Search books and browse your favorite</h2>
+    <p>Just enter the search query to obtain the results</p>
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ form }}
+        <input class="btn btn-danger" type="submit" value="Submit">
+    </form><br>
+
+    {% for result in results %}
+    <div class="card mb-3">
+        <div class="row g-0">
+            <div class="col-md-4">
+                <img src="{{ result.thumbnail }}" class="img-fluid rounded-start" alt="Book Cover">
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h5 class="card-title">{{ result.title }}</h5>
+                    {% if result.subtitle %}
+                    <h6 class="card-subtitle mb-2 text-muted">{{ result.subtitle }}</h6>
+                    {% endif %}
+                    {% if result.categories %}
+                    <p class="card-text"><strong>Categories:</strong>
+                        {% for category in result.categories %}
+                        {{ category }}{% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                    </p>
+                    {% endif %}
+                    {% if result.count %}
+                    <p class="card-text"><strong>Pages:</strong> {{ result.count }}</p>
+                    {% endif %}
+                    {% if result.rating %}
+                    <p class="card-text"><strong>Rating:</strong> {{ result.rating }}</p>
+                    {% endif %}
+                    {% if result.description %}
+                    <p class="card-text">{{ result.description }}</p>
+                    {% endif %}
+                    <a href="{{ result.link }}" target="_blank" class="btn btn-primary">View Book</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</section>
+
+{% endblock content %}
